@@ -422,7 +422,7 @@ display_images_and_labels("./train/00000073.png")
 
 # # tile images
 
-# In[ ]:
+# In[9]:
 
 
 # Reference: https://github.com/slanj/yolo-tiling/blob/main/tile_yolo.py
@@ -435,6 +435,7 @@ def tiler(imnames, newpath, falsepath, slice_size, ext):
     '''
     
     for imname in imnames:
+        print(imname)
         im = cv2.imread(imname)
         height, width, _ = im.shape
         h_new = math.ceil(height/slice_size) * slice_size
@@ -477,13 +478,14 @@ def tiler(imnames, newpath, falsepath, slice_size, ext):
                         inter = pol.intersection(box[1])        
                         
                         if not imsaved:
-                            sliced_im = im[i*slice_size:(i+1)*slice_size, j*slice_size:(j+1)*slice_size]
+                            sliced_im = im[i*slice_size:(i+1)*slice_size, j*slice_size:(j+1)*slice_size, :]
                             
                             filename = imname.split('/')[-1]
                             slice_path = newpath + "/" + filename.replace(ext, f'_{i}_{j}{ext}')                            
                             slice_labels_path = newpath + "/" + filename.replace(ext, f'_{i}_{j}.txt')                            
                             #print(slice_path)
-                            sliced_im.save(slice_path)
+                            cv2.imwrite(slice_path, sliced_im)
+                            #sliced_im.save(slice_path)
                             imsaved = True                    
                         
                         # get smallest rectangular polygon (with sides parallel to the coordinate axes) that contains the intersection
@@ -526,7 +528,7 @@ def tiler(imnames, newpath, falsepath, slice_size, ext):
     print("tiling successfully completed")
 
 
-# In[ ]:
+# In[15]:
 
 
 
@@ -565,9 +567,9 @@ def generate_text_files(images_path, name):
 # In[ ]:
 
 
-generate_text_files("./train_tiled/", "train_tiled")
-generate_text_files("./cv_tiled/", "cv_tiled")
-generate_text_files("./test_tiled/", "test_tiled")
+generate_text_files("./data/vedai/data/train_tiled/", "train_tiled")
+generate_text_files("./data/vedai/data/cv_tiled/", "cv_tiled")
+generate_text_files("./data/vedai/data/test_tiled/", "test_tiled")
 
 
 # In[ ]:
